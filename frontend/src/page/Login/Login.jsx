@@ -1,4 +1,3 @@
-import axios from "axios";
 import "./Login.css";
 import { useState } from "react";
 import { toast } from "react-toastify";
@@ -6,6 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import logo from "../../assets/logoweb.png";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
+import { login } from "../../api/ApiMovie";
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -19,30 +19,17 @@ const Login = () => {
     setIsLoading(true);
 
     try {
-      // Gửi yêu cầu đăng nhập đến backend
-      const response = await axios.post("http://localhost:5000/api/login", {
-        username,
-        password,
-      });
+      // Gọi API login
+      const result = await login(username, password);
 
-      // Kiểm tra xem phản hồi có chứa token không
-      if (response.data.token) {
-        // Lưu token vào localStorage
-        localStorage.setItem("token", response.data.token);
+      if (result.success) {
         toast.success("Login successful!");
-
         // Chuyển hướng về trang chủ
         navigate("/");
-      } else {
-        // Nếu không có token, hiển thị thông báo lỗi
-        toast.error(response.data.msg || "Login failed");
       }
     } catch (error) {
-      console.error("Login error:", error);
-      // Kiểm tra xem lỗi có thông báo từ server không
-      const errorMsg =
-        error.response?.data?.msg || "An error occurred during login.";
-      toast.error(errorMsg);
+      // Hiển thị thông báo lỗi
+      toast.error(error.message);
     } finally {
       setIsLoading(false);
     }

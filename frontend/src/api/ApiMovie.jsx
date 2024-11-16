@@ -9,6 +9,34 @@ const api = axios.create({
     "Content-Type": "application/json",
   },
 });
+
+const login = async (username, password) => {
+  try {
+    // Gửi yêu cầu đăng nhập đến backend
+    const response = await api.post("api/login", {
+      username,
+      password,
+    });
+
+    // Kiểm tra xem phản hồi có chứa token không
+    if (response.data.token) {
+      // Lưu token vào localStorage
+      localStorage.setItem("token", response.data.token);
+
+      return { success: true, token: response.data.token };
+    } else {
+      // Nếu không có token, trả về thông báo lỗi
+      throw new Error(response.data.msg || "Login failed");
+    }
+  } catch (error) {
+    console.error("Login error:", error);
+
+    // Kiểm tra xem lỗi có thông báo từ server không
+    const errorMsg =
+      error.response?.data?.msg || "An error occurred during login.";
+    throw new Error(errorMsg);
+  }
+};
 const movieFavorites = {
   getFavorites: async (token) => {
     try {
@@ -139,4 +167,4 @@ const getMovieM3u8Link = async (title) => {
   }
 };
 
-export { movieFavorites, watchLists, getMovieM3u8Link };
+export { movieFavorites, watchLists, getMovieM3u8Link, login };
