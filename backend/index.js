@@ -12,7 +12,10 @@ connectDB();
 // Sử dụng middleware CORS
 app.use(
   cors({
-    origin: "http://localhost:5173", // Địa chỉ frontend của bạn
+    origin: [
+      "http://localhost:5173", // Local frontend
+      "https://cine-plexus-oc1r.vercel.app",
+    ], // Production frontend // Địa chỉ frontend của bạn
     methods: ["GET", "POST", "DELETE"], // Các phương thức mà bạn muốn cho phép
   })
 );
