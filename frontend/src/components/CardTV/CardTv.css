@@ -1,0 +1,189 @@
+.tvCard {
+  position: relative;
+  margin-bottom: 30px;
+}
+
+.tvCard h2 {
+  margin-bottom: 8px;
+  font-size: 24px;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.tvCard .see-all {
+  font-size: 16px;
+  color: #888;
+  margin-right: 10px;
+}
+
+.tvCard .see-all:hover {
+  color: yellow;
+  cursor: pointer;
+}
+
+.tv-list {
+  display: flex;
+  justify-content: space-between;
+  overflow: hidden;
+  width: 100%;
+  white-space: nowrap;
+  gap: 20px;
+}
+
+.tv-list .cardTV {
+  cursor: pointer;
+  margin: auto;
+  width: 230px;
+  height: 400px;
+}
+
+.tv-image {
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+.tv-image img,
+.tv-image {
+  transition: transform 0.3s ease;
+  width: 230px;
+  height: 340px;
+}
+
+.cardTV:hover .tv-image img {
+  transform: scale(1.2);
+  border: 5px solid white;
+}
+
+.cardTV:hover .tv-image {
+  border: 2px solid white;
+}
+.tv-info {
+  padding: 5px;
+  height: 50px;
+}
+.tv-info .tv-title {
+  color: #fff;
+  font-size: 1em;
+  white-space: wrap;
+  text-align: center;
+}
+.cardTV:hover .tv-title {
+  color: red;
+}
+.tv-sub-info {
+  font-size: 16px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.tv-rating {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  justify-content: center;
+}
+
+.tv-rating .icon-star {
+  color: yellow;
+}
+.load-more-btn,
+.load-less-btn {
+  position: absolute;
+
+  background-color: rgba(136, 136, 136, 0.2);
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 50%;
+}
+.load-less-btn {
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+}
+.load-more-btn {
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+}
+.icon-more,
+.icon-less {
+  font-size: 2em;
+  color: red;
+}
+
+/* 
+@media (max-width: 1024px) {
+  .tvCard h2 {
+    font-size: 22px;
+  }
+  .tv-list {
+    grid-template-columns: repeat(4, minmax(auto, 1fr));
+  }
+  .tv-image img,
+  .tv-image {
+    height: 300px;
+  }
+  .tv-info .tv-title {
+    font-size: 16px;
+  }
+  .tv-sub-info {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 800px) {
+  .tvCard h2 {
+    font-size: 20px;
+  }
+  .tv-list {
+    grid-template-columns: repeat(2, minmax(auto, 1fr));
+  }
+  .tv-image img,
+  .tv-image {
+    height: 250px;
+  }
+  .tv-info .tv-title {
+    font-size: 14px;
+  }
+  .tv-sub-info {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 500px) {
+  .tvCard h2 {
+    font-size: 18px;
+  }
+  .tv-list {
+    grid-template-columns: repeat(2, minmax(auto, 1fr));
+  }
+  .tv-image img,
+  .tv-image {
+    width: 100%;
+  }
+  .tv-info .tv-title {
+    font-size: 12px;
+  }
+  .tv-sub-info {
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 320px) {
+  .tvCard h2 {
+    font-size: 15px;
+  }
+  .tv-image img,
+  .tv-image {
+    height: 150px;
+  }
+  .tv-info .tv-title {
+    font-size: 10px;
+  }
+  .tv-sub-info {
+    font-size: 8px;
+  }
+} */
