@@ -40,7 +40,7 @@ const login = async (username, password) => {
 const movieFavorites = {
   getFavorites: async (token) => {
     try {
-      const response = await api.get("favorites/getFavorites", {
+      const response = await api.get("api/favorites/getFavorites", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -70,11 +70,14 @@ const movieFavorites = {
 
   deleteFavorite: async (movieId, token) => {
     try {
-      const response = await api.delete(`favorites/deleteFavorite/${movieId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await api.delete(
+        `api/favorites/deleteFavorite/${movieId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       console.log("data", response.data);
       return response.data;
     } catch (error) {
@@ -86,7 +89,7 @@ const watchLists = {
   // Lấy danh sách watchlist của người dùng
   getWatchLists: async (token) => {
     try {
-      const response = await api.get("watchList/getWatchLists", {
+      const response = await api.get("api/watchList/getWatchLists", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -119,7 +122,7 @@ const watchLists = {
   deleteWatchList: async (movieId, token) => {
     try {
       const response = await api.delete(
-        `watchList/deleteWatchList/${movieId}`,
+        `api/watchList/deleteWatchList/${movieId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
