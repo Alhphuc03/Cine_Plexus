@@ -17,6 +17,7 @@ app.use(
       "https://cine-plexus-oc1r.vercel.app",
     ], // Production frontend // Địa chỉ frontend của bạn
     methods: ["GET", "POST", "DELETE"], // Các phương thức mà bạn muốn cho phép
+    credentials: true,
   })
 );
 
