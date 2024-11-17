@@ -54,7 +54,7 @@ const movieFavorites = {
   addFavorite: async (movieId, token) => {
     try {
       const response = await api.post(
-        "favorites/addFavorite",
+        "api/favorites/addFavorite",
         { movieId },
         {
           headers: {
@@ -104,7 +104,7 @@ const watchLists = {
   addWatchList: async (movieId, token) => {
     try {
       const response = await api.post(
-        "watchList/addWatchList",
+        "api/watchList/addWatchList",
         { movieId },
         {
           headers: {
