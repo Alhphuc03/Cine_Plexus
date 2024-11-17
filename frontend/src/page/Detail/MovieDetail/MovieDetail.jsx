@@ -9,6 +9,7 @@ import {
   movieFavorites,
   watchLists,
   getMovieM3u8Link,
+  ratingMovies,
 } from "../../../api/ApiMovie";
 import { FaHeartCirclePlus } from "react-icons/fa6";
 import { MdBookmarkAdd } from "react-icons/md";
@@ -37,6 +38,7 @@ const MovieDetail = () => {
   const [isFavorite, setIsFavorite] = useState(false);
   const [isWatchList, setIsWatchList] = useState(false);
   const [isRating, setIsRating] = useState(false);
+  const [ratingComment, setRatingComment] = useState("");
   const [ratingValue, setRatingValue] = useState(0);
   const [isRatingModalOpen, setIsRatingModalOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 500);
@@ -82,6 +84,10 @@ const MovieDetail = () => {
           (movie) => movie.movieId === id
         );
         setIsWatchList(isMovieWatchList);
+
+        const ratingResponse = await ratingMovies.getRatings(token);
+        const isRating = ratingResponse.some((movie) => movie.movieId === id);
+        setIsRating(isRating);
 
         setIsLoading(false);
       } catch (err) {
@@ -223,13 +229,34 @@ const MovieDetail = () => {
 
   const handleRatingSubmit = async () => {
     try {
-      await tmdbApi.addRating("movie", id, ratingValue);
-      setIsRating((prev) => !prev);
-      setIsRatingModalOpen(false);
-      toast.success("Rating submitted successfully!");
+      const token = localStorage.getItem("token"); // Retrieve token from localStorage
+      if (!token) {
+        toast.error("You need to log in to submit a rating.");
+        return;
+      }
+      console.log("rating", ratingValue, ratingComment);
+      // Call the new API with the required data
+      await ratingMovies.addRating(id, ratingValue, ratingComment, token);
+
+      setIsRating((prev) => !prev); // Update the rating state
+      setIsRatingModalOpen(false); // Close the modal
+      toast.success("Your rating has been submitted successfully!");
     } catch (error) {
-      console.error("Error adding rating:", error);
-      toast.error("Failed to submit rating.");
+      console.error("Error adding/updating rating:", error);
+      toast.error("Failed to submit rating. Please try again.");
+    }
+  };
+
+  const handleDeleteRating = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await ratingMovies.deleteRating(id, token);
+      console.log("Rating deleted successfully", response);
+      toast.success("Your rating has been deleted successfully!");
+      setIsRatingModalOpen(false);
+      setIsRating(false);
+    } catch (error) {
+      console.error("Error deleting rating:", error);
     }
   };
 
@@ -434,7 +461,7 @@ const MovieDetail = () => {
             <h3>Similar Movies</h3>
             <Similar cate="movie" id={movieDetail.id} />
           </div>
-          {isRatingModalOpen && (
+          {isRatingModalOpen && !isRating && (
             <div className="rating-modal">
               <div className="rating-content">
                 <h3>Rating</h3>
@@ -449,13 +476,38 @@ const MovieDetail = () => {
                     />
                   ))}
                 </div>
-                <button onClick={handleRatingSubmit}>Submit Rating</button>
-                <button
-                  className="close"
-                  onClick={() => setIsRatingModalOpen(false)}
-                >
-                  Close
-                </button>
+                <textarea
+                  className="rating-comment"
+                  placeholder="Write your comment here..."
+                  value={ratingComment}
+                  onChange={(e) => setRatingComment(e.target.value)}
+                />
+                <div className="action-rating">
+                  <button onClick={handleRatingSubmit}>Submit Rating</button>
+                  <button
+                    className="close"
+                    onClick={() => setIsRatingModalOpen(false)}
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {isRatingModalOpen && isRating && (
+            <div className="rating-modal">
+              <div className="rating-content">
+                <h3>Are you sure you want to delete your rating?</h3>
+                <div className="action-rating">
+                  <button onClick={handleDeleteRating}>Yes, Delete</button>
+                  <button
+                    className="close"
+                    onClick={() => setIsRatingModalOpen(false)}
+                  >
+                    No, Keep Rating
+                  </button>
+                </div>
               </div>
             </div>
           )}

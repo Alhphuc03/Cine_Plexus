@@ -25,6 +25,18 @@ const {
   removeWatchListTv,
 } = require("../controller/action_TV/watchListController");
 
+const {
+  getRatings,
+  addOrUpdateRating,
+  removeRating,
+} = require("../controller/action_Movie/ratingsController");
+
+const {
+  getRatingTvs,
+  addOrUpdateRatingTv,
+  removeRatingTv,
+} = require("../controller/action_TV/ratingsController");
+
 const router = express.Router();
 const auth = require("../middleware/authMiddleware");
 
@@ -50,5 +62,15 @@ router.delete("/favoritesTv/deleteFavorite/:tvId", auth, removeFavoriteTv);
 router.get("/watchListTv/getWatchLists", auth, getWatchListsTv);
 router.post("/watchListTv/addWatchList", auth, addWatchListsTv);
 router.delete("/watchListTv/deleteWatchList/:tvId", auth, removeWatchListTv);
+
+// Routes cho đánh giá movie
+router.get("/ratingMovie/getRatings", auth, getRatings);
+router.post("/ratingMovie/addOrUpdateRating", auth, addOrUpdateRating);
+router.delete("/ratingMovie/deleteRating/:movieId", auth, removeRating);
+
+// Routes cho đánh giá tv
+router.get("/ratingTv/getRatings", auth, getRatingTvs);
+router.post("/ratingMovieTv/addOrUpdateRating", auth, addOrUpdateRatingTv);
+router.delete("/ratingMovieTv/deleteRating/:tvId", auth, removeRatingTv);
 
 module.exports = router;

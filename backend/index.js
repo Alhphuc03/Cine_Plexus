@@ -24,7 +24,7 @@ app.use(
 app.use(express.json());
 
 // Sử dụng route
-app.use("api", authRoutes);
+app.use("/api", authRoutes);
 
 // Khởi động server
 const PORT = process.env.PORT || 5000;

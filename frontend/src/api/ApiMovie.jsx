@@ -54,7 +54,7 @@ const movieFavorites = {
   addFavorite: async (movieId, token) => {
     try {
       const response = await api.post(
-        "favorites/addFavorite",
+        "api/favorites/addFavorite",
         { movieId },
         {
           headers: {
@@ -104,7 +104,7 @@ const watchLists = {
   addWatchList: async (movieId, token) => {
     try {
       const response = await api.post(
-        "watchList/addWatchList",
+        "api/watchList/addWatchList",
         { movieId },
         {
           headers: {
@@ -133,6 +133,58 @@ const watchLists = {
       return response.data;
     } catch (error) {
       throw new Error("Error deleting from watch list");
+    }
+  },
+};
+
+const ratingMovies = {
+  // Lấy danh sách rating của người dùng
+  getRatings: async (token) => {
+    try {
+      const response = await api.get("api/ratingMovie/getRatings", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error("Error fetching watch lists");
+    }
+  },
+
+  // Thêm phim vào danh sách rating
+  addRating: async (movieId, rating, comment, token) => {
+    try {
+      const response = await api.post(
+        "api/ratingMovie/addOrUpdateRating",
+        { movieId, rating, comment },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      throw new Error("Error adding/updating movie rating");
+    }
+  },
+
+  // Xoá phim khỏi danh sách watchlist
+  deleteRating: async (movieId, token) => {
+    try {
+      const response = await api.delete(
+        `api/ratingMovie/deleteRating/${movieId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log("data", response.data);
+      return response.data;
+    } catch (error) {
+      throw new Error("Error deleting movie rating");
     }
   },
 };
@@ -170,4 +222,4 @@ const getMovieM3u8Link = async (title) => {
   }
 };
 
-export { movieFavorites, watchLists, getMovieM3u8Link, login };
+export { movieFavorites, watchLists, getMovieM3u8Link, login, ratingMovies };

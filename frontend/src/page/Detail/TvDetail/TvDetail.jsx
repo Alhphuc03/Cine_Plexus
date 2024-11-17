@@ -15,7 +15,7 @@ import ReviewItem from "../../../components/ReviewsList/ReviewList";
 import Similar from "../../../components/Similar/Similar";
 import Credits from "../../../components/Credits/Credits";
 import tmdbApi from "../../../api/api";
-import { tvFavorites, tvWatchLists } from "../../../api/ApiTv";
+import { tvFavorites, tvWatchLists, ratingTvs } from "../../../api/ApiTv";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 const TvDetail = () => {
@@ -31,6 +31,7 @@ const TvDetail = () => {
   const [isRating, setIsRating] = useState(false);
   const [ratingValue, setRatingValue] = useState(0);
   const [isRatingModalOpen, setIsRatingModalOpen] = useState(false);
+  const [ratingComment, setRatingComment] = useState("");
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
@@ -49,6 +50,10 @@ const TvDetail = () => {
         const watchListResponse = await tvWatchLists.getWatchLists(token);
         const isMovieWatchList = watchListResponse.some((tv) => tv.tvId === id);
         setIsWatchList(isMovieWatchList);
+
+        const ratingResponse = await ratingTvs.getRatings(token);
+        const isRating = ratingResponse.some((tv) => tv.tvId === id);
+        setIsRating(isRating);
 
         setIsLoading(false);
       } catch (err) {
@@ -186,13 +191,34 @@ const TvDetail = () => {
 
   const handleRatingSubmit = async () => {
     try {
-      await tmdbApi.addRating("tv", id, ratingValue);
-      setIsRating((prev) => !prev);
-      setIsRatingModalOpen(false);
-      toast.success("Rating submitted successfully!");
+      const token = localStorage.getItem("token"); // Retrieve token from localStorage
+      if (!token) {
+        toast.error("You need to log in to submit a rating.");
+        return;
+      }
+      console.log("rating", ratingValue, ratingComment);
+      // Call the new API with the required data
+      await ratingTvs.addRating(id, ratingValue, ratingComment, token);
+
+      setIsRating((prev) => !prev); // Update the rating state
+      setIsRatingModalOpen(false); // Close the modal
+      toast.success("Your rating has been submitted successfully!");
     } catch (error) {
-      console.error("Error adding rating:", error);
-      toast.error("Failed to submit rating.");
+      console.error("Error adding/updating rating:", error);
+      toast.error("Failed to submit rating. Please try again.");
+    }
+  };
+
+  const handleDeleteRating = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await ratingTvs.deleteRating(id, token);
+      console.log("Rating deleted successfully", response);
+      toast.success("Your rating has been deleted successfully!");
+      setIsRatingModalOpen(false);
+      setIsRating(false);
+    } catch (error) {
+      console.error("Error deleting rating:", error);
     }
   };
 
@@ -332,7 +358,7 @@ const TvDetail = () => {
             <h3> Similar Tvs</h3>
             <Similar cate="tv" id={tvDetail.id} />
           </div>
-          {isRatingModalOpen && (
+          {isRatingModalOpen && !isRating && (
             <div className="rating-modal">
               <div className="rating-content">
                 <h3>Rating</h3>
@@ -347,13 +373,38 @@ const TvDetail = () => {
                     />
                   ))}
                 </div>
-                <button onClick={handleRatingSubmit}>Submit Rating</button>
-                <button
-                  className="close"
-                  onClick={() => setIsRatingModalOpen(false)}
-                >
-                  Close
-                </button>
+                <textarea
+                  className="rating-comment"
+                  placeholder="Write your comment here..."
+                  value={ratingComment}
+                  onChange={(e) => setRatingComment(e.target.value)}
+                />
+                <div className="action-rating">
+                  <button onClick={handleRatingSubmit}>Submit Rating</button>
+                  <button
+                    className="close"
+                    onClick={() => setIsRatingModalOpen(false)}
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {isRatingModalOpen && isRating && (
+            <div className="rating-modal">
+              <div className="rating-content">
+                <h3>Are you sure you want to delete your rating?</h3>
+                <div className="action-rating">
+                  <button onClick={handleDeleteRating}>Yes, Delete</button>
+                  <button
+                    className="close"
+                    onClick={() => setIsRatingModalOpen(false)}
+                  >
+                    No, Keep Rating
+                  </button>
+                </div>
               </div>
             </div>
           )}

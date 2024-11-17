@@ -293,21 +293,31 @@ h3 {
   border-radius: 8px;
   padding: 20px;
   width: 80%;
-  max-width: 500px;
+  max-width: 450px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   text-align: center;
+  display: flex;
+  flex-direction: column;
 }
-
+.rating-comment {
+  color: black;
+  margin: 0 5px;
+  padding: 0 5px;
+  border-radius: 5px;
+}
 .rating-stars {
   margin: 20px 0;
   display: flex;
   justify-content: center;
+  gap: 10px;
 }
-
+.action-rating {
+  display: flex;
+  justify-content: space-between;
+}
 .rating-star {
   font-size: 2rem;
   color: #ccc;
-  margin: 0 5px;
   cursor: pointer;
   transition: color 0.3s ease;
 }
