@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react";
-import tmdbApi from "../../api/api";
+import {
+  movieFavorites,
+  getUserDetail,
+  watchLists,
+  ratingMovies,
+} from "../../api/ApiMovie";
 import loadingimg from "../../assets/Animation - 1720970751731.gif";
 import Navbar from "../../components/Navbar/Navbar";
 import "./Profile.css";
@@ -17,31 +22,28 @@ const Profile = () => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        const sessionId = localStorage.getItem("sessionId");
-        const responseData = await tmdbApi.getAccountDetails(sessionId);
+        const token = localStorage.getItem("token");
+        const responseData = await getUserDetail(token);
 
-        setProfileData(responseData);
+        setProfileData(responseData.data);
 
-        const accountID = responseData.id;
-        localStorage.setItem("accountID", accountID);
-        const responseDataWL = await tmdbApi.getWatchListMovie(
-          accountID,
+        const responseDataFavorite = await movieFavorites.getFavorites(
+          token,
           "movies"
         );
-        const responseDataRated = await tmdbApi.getRatedMovie(
-          accountID,
+        const responseDataWL = await watchLists.getWatchLists(token, "movies");
+
+        const responseDataRated = await ratingMovies.getRatings(
+          token,
           "movies"
         );
-        const responseDataFavorite = await tmdbApi.getFavoriteMovie(
-          accountID,
-          "movies"
-        );
-        setDataWatchList(responseDataWL.results);
-        setDataRated(responseDataRated.results);
-        setDataFavorite(responseDataFavorite.results);
-        console.log("responseDataWL.results", responseDataWL.results);
+
+        setDataWatchList(responseDataWL);
+        setDataRated(responseDataRated);
+        setDataFavorite(responseDataFavorite);
         setIsLoading(false);
-        console.log("profile", responseData);
+        console.log("fvdata", responseDataFavorite);
+        console.log("fv", dataFavorite);
       } catch (err) {
         console.error(err);
         setIsLoading(false);
@@ -67,16 +69,16 @@ const Profile = () => {
             <div className="account-info">
               <div className="avatar-profile">
                 <img
-                  src={`https://image.tmdb.org/t/p/w500/${profileData.avatar.tmdb.avatar_path}`}
+                  src={profileData.avatar}
                   alt="Avatar"
                   className="avatar-image"
                 />
               </div>
               <div className="profile-details">
                 <p>Username: {profileData.username}</p>
-                <p>ID: {profileData.id}</p>
+                {/* <p>ID: {profileData.id}</p>
                 <p>Language: {profileData.iso_639_1}</p>
-                <p>Country: {profileData.iso_3166_1}</p>
+                <p>Country: {profileData.iso_3166_1}</p> */}
               </div>
             </div>
           </div>
@@ -93,11 +95,11 @@ const Profile = () => {
                   {dataWatchList.map((movie) => (
                     <div key={movie.id} className="item-movie">
                       <img
-                        src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
-                        alt={movie.title}
+                        src={movie.movieImg}
+                        alt={movie.movieImg}
                         className="movie-poster-item"
                       />
-                      <p>{movie.title}</p>
+                      <p>{movie.movieName}</p>
                     </div>
                   ))}
                 </div>
@@ -117,11 +119,11 @@ const Profile = () => {
                   {dataFavorite.map((movie) => (
                     <div key={movie.id} className="item-movie">
                       <img
-                        src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
-                        alt={movie.title}
+                        src={movie.movieImg}
+                        alt={movie.movieImg}
                         className="movie-poster-item"
                       />
-                      <p>{movie.title}</p>
+                      <p>{movie.movieName}</p>
                     </div>
                   ))}
                 </div>
@@ -141,11 +143,11 @@ const Profile = () => {
                   {dataRedted.map((movie) => (
                     <div key={movie.id} className="item-movie">
                       <img
-                        src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
-                        alt={movie.title}
+                        src={movie.movieImg}
+                        alt={movie.movieImg}
                         className="movie-poster-item"
                       />
-                      <p>{movie.title}</p>
+                      <p>{movie.movieName}</p>
                       <div className="rate">
                         <FaStar style={{ color: "yellow" }} />
                         <p>{movie.rating}</p>

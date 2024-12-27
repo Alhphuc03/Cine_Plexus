@@ -13,6 +13,14 @@ const movieFavoritesSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    movieName: {
+      type: String,
+      required: true,
+    },
+    movieImg: {
+      type: String,
+      required: true,
+    },
   },
   { collection: "Movie_Favorites" },
   { timestamps: true } // Tự động thêm các trường createdAt và updatedAt

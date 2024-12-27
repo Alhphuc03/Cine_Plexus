@@ -13,6 +13,14 @@ const movieRatingSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    movieName: {
+      type: String,
+      required: true,
+    },
+    movieImg: {
+      type: String,
+      required: true,
+    },
     rating: {
       type: Number,
       required: true,

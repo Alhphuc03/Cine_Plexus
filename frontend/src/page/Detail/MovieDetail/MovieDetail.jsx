@@ -144,12 +144,24 @@ const MovieDetail = () => {
     }
 
     // Hàm xử lý thêm/xoá yêu thích chung
-    const handleFavoriteAction = async (action, movieId, userToken) => {
+    const handleFavoriteAction = async (
+      action,
+      movieId,
+      movieName,
+      movieImg,
+      userToken
+    ) => {
       try {
-        const response = await action(movieId, userToken);
+        // Kiểm tra nếu action là xóa khỏi danh sách yêu thích
+        const response = await action(
+          movieId,
+          isFavorite ? userToken : movieName, // Truyền userToken khi xóa khỏi yêu thích
+          isFavorite ? null : movieImg, // Truyền null khi xóa
+          userToken
+        );
 
         if (response) {
-          return true; // Trả về thành công
+          return true;
         } else {
           throw new Error("Action failed.");
         }
@@ -160,10 +172,20 @@ const MovieDetail = () => {
       }
     };
 
+    const movieName = movieDetail.title;
+    const movieImg = `https://image.tmdb.org/t/p/original${movieDetail.poster_path}`;
     const action = isFavorite
       ? movieFavorites.deleteFavorite
       : movieFavorites.addFavorite;
-    const success = await handleFavoriteAction(action, id, token);
+
+    // Khi action là xóa, chỉ truyền movieId và userToken
+    const success = await handleFavoriteAction(
+      action,
+      id,
+      isFavorite ? null : movieName,
+      isFavorite ? null : movieImg,
+      token
+    );
 
     if (success) {
       setIsFavorite(!isFavorite); // Cập nhật trạng thái yêu thích
@@ -183,14 +205,26 @@ const MovieDetail = () => {
     const token = localStorage.getItem("token");
 
     if (!token) {
-      toast.error("You need to log in to manage watch list.");
+      toast.error("You need to log in to manage your watch list.");
       return;
     }
 
     // Hàm xử lý thêm/xoá watch list chung
-    const handleWatchListAction = async (action, movieId, userToken) => {
+    const handleWatchListAction = async (
+      action,
+      movieId,
+      movieName,
+      movieImg,
+      userToken
+    ) => {
       try {
-        const response = await action(movieId, userToken);
+        // Kiểm tra nếu action là xóa khỏi danh sách theo dõi
+        const response = await action(
+          movieId,
+          isWatchList ? userToken : movieName, // Truyền userToken khi xóa khỏi danh sách
+          isWatchList ? null : movieImg, // Truyền null khi xóa
+          userToken
+        );
 
         if (response) {
           return true; // Trả về thành công
@@ -204,13 +238,23 @@ const MovieDetail = () => {
       }
     };
 
+    const movieName = movieDetail.title;
+    const movieImg = `https://image.tmdb.org/t/p/original${movieDetail.poster_path}`;
     const action = isWatchList
       ? watchLists.deleteWatchList
       : watchLists.addWatchList;
-    const success = await handleWatchListAction(action, id, token);
+
+    // Khi action là xóa, chỉ truyền movieId và userToken
+    const success = await handleWatchListAction(
+      action,
+      id,
+      isWatchList ? null : movieName, // Truyền null khi xóa
+      isWatchList ? null : movieImg, // Truyền null khi xóa
+      token
+    );
 
     if (success) {
-      setIsWatchList(!isWatchList); // Cập nhật trạng thái watchlist
+      setIsWatchList(!isWatchList); // Cập nhật trạng thái danh sách theo dõi
       toast.success(
         isWatchList ? "Removed from watch list!" : "Added to watch list!"
       );
@@ -229,17 +273,26 @@ const MovieDetail = () => {
 
   const handleRatingSubmit = async () => {
     try {
-      const token = localStorage.getItem("token"); // Retrieve token from localStorage
+      const token = localStorage.getItem("token");
+      const movieName = movieDetail.title;
+      const movieImg = `https://image.tmdb.org/t/p/original${movieDetail.poster_path}`;
       if (!token) {
         toast.error("You need to log in to submit a rating.");
         return;
       }
-      console.log("rating", ratingValue, ratingComment);
+      console.log("rating", ratingValue, ratingComment, movieName, movieImg);
       // Call the new API with the required data
-      await ratingMovies.addRating(id, ratingValue, ratingComment, token);
+      await ratingMovies.addRating(
+        id,
+        ratingValue,
+        ratingComment,
+        movieName,
+        movieImg,
+        token
+      );
 
-      setIsRating((prev) => !prev); // Update the rating state
-      setIsRatingModalOpen(false); // Close the modal
+      setIsRating((prev) => !prev);
+      setIsRatingModalOpen(false);
       toast.success("Your rating has been submitted successfully!");
     } catch (error) {
       console.error("Error adding/updating rating:", error);

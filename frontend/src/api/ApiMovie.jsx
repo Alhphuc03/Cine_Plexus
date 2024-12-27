@@ -37,6 +37,47 @@ const login = async (username, password) => {
     throw new Error(errorMsg);
   }
 };
+
+const signup = async (email, username, password) => {
+  try {
+    // Gửi yêu cầu đăng ký đến backend
+    const response = await api.post("api/signup", {
+      email,
+      username,
+      password,
+    });
+
+    return { success: true, data: response.data };
+  } catch (error) {
+    console.error("Signup error:", error);
+
+    // Kiểm tra xem lỗi có thông báo từ server không
+    const errorMsg =
+      error.response?.data?.msg || "An error occurred during signup.";
+    throw new Error(errorMsg);
+  }
+};
+
+const getUserDetail = async (token) => {
+  try {
+    const response = await api.get("api/user-detail", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    // Trả về dữ liệu người dùng
+    return { success: true, data: response.data };
+  } catch (error) {
+    console.error("Error fetching user detail:", error);
+
+    const errorMsg =
+      error.response?.data?.msg ||
+      "An error occurred while fetching user details.";
+    throw new Error(errorMsg);
+  }
+};
+
 const movieFavorites = {
   getFavorites: async (token) => {
     try {
@@ -51,11 +92,11 @@ const movieFavorites = {
     }
   },
 
-  addFavorite: async (movieId, token) => {
+  addFavorite: async (movieId, movieName, movieImg, token) => {
     try {
       const response = await api.post(
         "api/favorites/addFavorite",
-        { movieId },
+        { movieId, movieName, movieImg },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -101,11 +142,11 @@ const watchLists = {
   },
 
   // Thêm phim vào danh sách watchlist
-  addWatchList: async (movieId, token) => {
+  addWatchList: async (movieId, movieName, movieImg, token) => {
     try {
       const response = await api.post(
         "api/watchList/addWatchList",
-        { movieId },
+        { movieId, movieName, movieImg },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -153,19 +194,20 @@ const ratingMovies = {
   },
 
   // Thêm phim vào danh sách rating
-  addRating: async (movieId, rating, comment, token) => {
+  addRating: async (movieId, rating, comment, movieName, movieImg, token) => {
     try {
       const response = await api.post(
         "api/ratingMovie/addOrUpdateRating",
-        { movieId, rating, comment },
+        { movieId, rating, comment, movieName, movieImg }, // Thêm movieName và movieImg vào request body
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${token}`, // Đảm bảo token được gửi trong header
           },
         }
       );
       return response.data;
     } catch (error) {
+      console.error(error); // Hiển thị lỗi chi tiết
       throw new Error("Error adding/updating movie rating");
     }
   },
@@ -222,4 +264,12 @@ const getMovieM3u8Link = async (title) => {
   }
 };
 
-export { movieFavorites, watchLists, getMovieM3u8Link, login, ratingMovies };
+export {
+  movieFavorites,
+  watchLists,
+  getMovieM3u8Link,
+  login,
+  signup,
+  ratingMovies,
+  getUserDetail,
+};

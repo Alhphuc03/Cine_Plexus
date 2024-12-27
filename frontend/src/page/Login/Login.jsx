@@ -4,14 +4,16 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import logo from "../../assets/logoweb.png";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
+import { login, signup } from "../../api/ApiMovie";
 import { useNavigate } from "react-router-dom";
-import { login } from "../../api/ApiMovie";
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [isLogin, setIsLogin] = useState(true); // State để chuyển đổi giao diện
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
@@ -19,16 +21,30 @@ const Login = () => {
     setIsLoading(true);
 
     try {
-      // Gọi API login
-      const result = await login(username, password);
-
-      if (result.success) {
+      const { success, token } = await login(username, password);
+      if (success) {
         toast.success("Login successful!");
-        // Chuyển hướng về trang chủ
+        console.log("Token:", token);
         navigate("/");
       }
     } catch (error) {
-      // Hiển thị thông báo lỗi
+      toast.error(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleSignUp = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    try {
+      const { success } = await signup(email, username, password);
+      if (success) {
+        toast.success("Signup successful!");
+        setIsLogin(true);
+      }
+    } catch (error) {
       toast.error(error.message);
     } finally {
       setIsLoading(false);
@@ -46,8 +62,20 @@ const Login = () => {
         <div className="login-logo-wrapper">
           <img src={logo} alt="Logo" className="login-logo" />
         </div>
-        <h1>Login</h1>
-        <form onSubmit={handleLogin}>
+        <h1>{isLogin ? "Sign In" : "Sign Up"}</h1>
+        <form onSubmit={isLogin ? handleLogin : handleSignUp}>
+          {!isLogin && (
+            <div className="input-group">
+              <label htmlFor="email">Email</label>
+              <input
+                type="email"
+                id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </div>
+          )}
           <div className="input-group">
             <label htmlFor="username">Username</label>
             <input
@@ -77,21 +105,23 @@ const Login = () => {
             </div>
           </div>
           <button type="submit" disabled={isLoading}>
-            Login
+            {isLogin ? "Login" : "Sign Up"}
           </button>
-          <div className="form-help">
-            <div className="remember">
-              <input type="checkbox" id="remember" />
-              <label htmlFor="remember">Remember me</label>
-            </div>
-            <div className="form-switch">
-              <span>Switch to Signup</span>
-            </div>
+          <div className="form-switch">
+            <span
+              onClick={() => setIsLogin(!isLogin)}
+              style={{ cursor: "pointer", color: "blue" }}
+            >
+              <div className="auth-text">
+                {isLogin
+                  ? "If you don't have an account, sign up!"
+                  : "If you don't have an account, Sign In!"}
+              </div>
+            </span>
           </div>
         </form>
       </div>
     </div>
   );
 };
-
 export default Login;

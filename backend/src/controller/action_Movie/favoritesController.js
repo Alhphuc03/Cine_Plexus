@@ -16,7 +16,7 @@ const getFavorites = async (req, res) => {
 };
 
 const addFavorite = async (req, res) => {
-  const { movieId } = req.body;
+  const { movieId, movieName, movieImg } = req.body;
 
   // Đảm bảo rằng userId tồn tại
   if (!req.user || !req.user.userId) {
@@ -27,6 +27,8 @@ const addFavorite = async (req, res) => {
     const favorite = new MovieFavorites({
       userId: req.user.userId, // Sử dụng userId từ token
       movieId,
+      movieName,
+      movieImg,
     });
     await favorite.save();
     res.status(201).json({ msg: "Movie added to favorites", favorite });

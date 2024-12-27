@@ -1,5 +1,6 @@
 const express = require("express");
 const { login } = require("../controller/user/authLoginController");
+const { register } = require("../controller/user/authSingUpController");
 const { userDetail } = require("../controller/user/userDetailController");
 const {
   getFavorites,
@@ -72,5 +73,7 @@ router.delete("/ratingMovie/deleteRating/:movieId", auth, removeRating);
 router.get("/ratingTv/getRatings", auth, getRatingTvs);
 router.post("/ratingMovieTv/addOrUpdateRating", auth, addOrUpdateRatingTv);
 router.delete("/ratingMovieTv/deleteRating/:tvId", auth, removeRatingTv);
+
+router.post("/signup", register);
 
 module.exports = router;

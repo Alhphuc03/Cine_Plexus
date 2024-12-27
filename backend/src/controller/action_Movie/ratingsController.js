@@ -16,11 +16,15 @@ const getRatings = async (req, res) => {
 
 // Thêm hoặc cập nhật đánh giá phim
 const addOrUpdateRating = async (req, res) => {
-  const { movieId, rating, comment } = req.body;
+  const { movieId, rating, comment, movieName, movieImg } = req.body;
 
   // Đảm bảo rằng userId tồn tại
   if (!req.user || !req.user.userId) {
     return res.status(400).json({ msg: "User ID is required" });
+  }
+
+  if (!movieId || !rating) {
+    return res.status(400).json({ msg: "Movie ID and rating are required" });
   }
 
   try {
@@ -42,6 +46,8 @@ const addOrUpdateRating = async (req, res) => {
     const newRating = new MovieRating({
       userId: req.user.userId,
       movieId,
+      movieName,
+      movieImg,
       rating,
       comment,
     });

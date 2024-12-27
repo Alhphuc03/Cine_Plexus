@@ -14,6 +14,14 @@ const movieWatchListSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    movieName: {
+      type: String,
+      required: true,
+    },
+    movieImg: {
+      type: String,
+      required: true,
+    },
   },
   { collection: "WatchList_Movies" },
   { timestamps: true } // Tự động thêm các trường createdAt và updatedAt
