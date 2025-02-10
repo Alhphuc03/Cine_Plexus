@@ -31,7 +31,7 @@ Cine Plexus là một nền tảng xem phim trực tuyến hiện đại, mang �
 
 ### 6️⃣ Đăng nhập & Quản lý tài khoản
 - Hỗ trợ đăng nhập và lưu trữ thông tin cá nhân.
-![login](https://raw.githubusercontent.com/user/repo/main/screenshots/login.png)
+![login](https://github.com/user-attachments/assets/03df4e4f-97fd-4eca-8997-354b2985507c)
 
 ## 🛠 Công nghệ sử dụng
 
