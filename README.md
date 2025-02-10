@@ -7,17 +7,17 @@ Cine Plexus là một nền tảng xem phim trực tuyến hiện đại, mang �
 ### 🎬 1. Khám phá phim đa dạng
 - Hiển thị danh sách phim theo nhiều danh mục: **Phim phổ biến**, **Phim đang chiếu**, **Phim sắp ra mắt**, **Phim được đánh giá cao**.
 - Giao diện **card phim** trực quan với hình ảnh chất lượng cao.
-![homePage](https://raw.githubusercontent.com/user/repo/main/screenshots/homePage.png)
+![homePage](https://github.com/user-attachments/assets/0684010c-1bbe-41b3-aee8-d4b8f6c00512)
 
 ### 🔎 2. Tìm kiếm phim thông minh
 - Tìm kiếm phim theo **tên, thể loại hoặc diễn viên** với tốc độ phản hồi nhanh chóng.
 - **Gợi ý tìm kiếm tự động** giúp người dùng dễ dàng tìm thấy phim mong muốn.
-![search](https://raw.githubusercontent.com/user/repo/main/screenshots/search.png)
+![search](https://github.com/user-attachments/assets/789ec8e1-61e5-43bb-adba-a336dd2771f3)
 
 ### 📌 3. Trang chi tiết phim
 - Cung cấp **thông tin chi tiết**: tiêu đề, mô tả, đạo diễn, diễn viên, ngày phát hành, đánh giá và trailer.
 - Hiển thị **các phim tương tự** để người dùng có thể khám phá thêm.
-![detail](https://raw.githubusercontent.com/user/repo/main/screenshots/detail.png)
+![detail](https://github.com/user-attachments/assets/f52452ec-c6e6-47c4-89f0-355858cf3c0d)
 
 ### 🎥 4. Xem phim trực tuyến
 - **Chất lượng cao**, tốc độ tải nhanh.
