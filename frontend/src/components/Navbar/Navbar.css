@@ -103,6 +103,16 @@
   background: #141414;
 }
 
+.login-btn {
+  color: #e5e5e5;
+  font-size: 20px;
+  transition: color 0.3sease;
+}
+
+.login-btn:hover {
+  color: #b3b3b3;
+}
+
 @media (max-width: 1024px) {
   .navbar {
     padding: 20px 4%;
