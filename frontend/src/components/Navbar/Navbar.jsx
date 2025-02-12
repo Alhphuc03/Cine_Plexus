@@ -18,6 +18,7 @@ const Navbar = () => {
   const { pathname } = useLocation();
   const [searchVisible, setSearchVisible] = useState(false);
   const navigate = useNavigate();
+  const [token, setToken] = useState(localStorage.getItem("token"));
 
   useEffect(() => {
     const handleScroll = () => {
@@ -36,24 +37,23 @@ const Navbar = () => {
   }, []);
 
   useEffect(() => {
-    const fetchUserDetails = async () => {
-      try {
-        const userDetails = await API.getUserDetails();
-        if (userDetails.avatar) {
-          setProfileImage(userDetails.avatar);
-        } else {
+    if (token) {
+      const fetchUserDetails = async () => {
+        try {
+          const userDetails = await API.getUserDetails();
+          setProfileImage(userDetails.avatar || profile_icon);
+        } catch (error) {
+          console.error("Error fetching user details:", error);
           setProfileImage(profile_icon);
         }
-      } catch (error) {
-        console.error("Error fetching user details:", error);
-      }
-    };
-
-    fetchUserDetails();
-  }, []);
+      };
+      fetchUserDetails();
+    }
+  }, [token]);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
+    setToken(null);
     toast.success("Logout successful!");
     navigate("/login");
   };
@@ -96,27 +96,29 @@ const Navbar = () => {
           className="icons"
           onClick={() => setSearchVisible(!searchVisible)}
         />
-        <div className="navbar-profile">
-          <Link to={profileImage ? "/profile" : "/login"}>
+        {token ? (
+          <div className="navbar-profile">
+            <Link to="/profile">
+              <img src={profileImage} alt="Profile" className="profile" />
+            </Link>
             <img
-              src={profileImage || profile_icon}
-              alt="Profile"
-              className="profile"
+              src={caret_icon}
+              alt=""
+              onClick={() => setShowDropdown(!showDropdown)}
+              className="caret-icon"
             />
+            {showDropdown && (
+              <div className="dropdown">
+                <button>Profile</button>
+                <button onClick={handleLogout}>Logout</button>
+              </div>
+            )}
+          </div>
+        ) : (
+          <Link to="/login" className="login-btn">
+            Login
           </Link>
-          <img
-            src={caret_icon}
-            alt=""
-            onClick={() => setShowDropdown(!showDropdown)}
-            className="caret-icon"
-          />
-          {showDropdown && (
-            <div className="dropdown">
-              <button>Profile</button>
-              <button onClick={handleLogout}>Logout</button>
-            </div>
-          )}
-        </div>
+        )}
       </div>
       {searchVisible && <Search onClose={() => setSearchVisible(false)} />}
     </div>
