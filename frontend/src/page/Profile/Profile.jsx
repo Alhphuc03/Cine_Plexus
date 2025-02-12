@@ -11,6 +11,7 @@ import "./Profile.css";
 import { CiLogout, CiStar, CiViewList, CiCircleInfo } from "react-icons/ci";
 import { MdFavoriteBorder } from "react-icons/md";
 import { FaStar } from "react-icons/fa6";
+import profile_icon from "../../assets/profile_img.png";
 const Profile = () => {
   const [profileData, setProfileData] = useState([]);
   const [dataWatchList, setDataWatchList] = useState([]);
@@ -69,7 +70,7 @@ const Profile = () => {
             <div className="account-info">
               <div className="avatar-profile">
                 <img
-                  src={profileData.avatar}
+                  src={profileData.avatarc || profile_icon}
                   alt="Avatar"
                   className="avatar-image"
                 />
