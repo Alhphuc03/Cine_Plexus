@@ -9,8 +9,10 @@ import loading from "../../assets/Animation - 1720970751731.gif";
 import { useEffect, useState } from "react";
 import CardsTV from "../../components/CardTV/CardTv";
 import "react-toastify/dist/ReactToastify.css";
+import { Link } from "react-router-dom";
 const Home = () => {
   const [isLoading, setIsLoading] = useState(true);
+  const [focusedCardId, setFocusedCardId] = useState("");
   const [focusedCardImage, setFocusedCardImage] = useState("");
   const [focusedCardOverview, setFocusedCardOverview] = useState("");
   const [focusCarrdTitle, setFocusCardTitle] = useState("");
@@ -23,7 +25,8 @@ const Home = () => {
     return () => clearTimeout(delay);
   }, []);
 
-  const handleCardFocus = ({ imageURL, overview, original_title }) => {
+  const handleCardFocus = ({ id, imageURL, overview, original_title }) => {
+    setFocusedCardId(id);
     setFocusedCardImage(imageURL);
     setFocusedCardOverview(overview);
     setFocusCardTitle(original_title);
@@ -62,10 +65,15 @@ const Home = () => {
                   <img src={play_icons} alt="" />
                   Play
                 </button>
-                <button className="btn dark-btn">
-                  <img src={info_icon} alt="" />
-                  More Info
-                </button>
+                <Link
+                  to={`/movieDetail/${focusedCardId}`}
+                  className="card-carousel w-96"
+                >
+                  <button className="btn dark-btn">
+                    <img src={info_icon} alt="" />
+                    More Info
+                  </button>
+                </Link>
               </div>
               <CardCarousel onCardFocus={handleCardFocus} />
             </div>
