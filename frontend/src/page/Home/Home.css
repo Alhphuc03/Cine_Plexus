@@ -82,7 +82,7 @@
 }
 @media (min-width: 1440px) {
   .hero {
-    height: 100vh;
+    height: 60vh;
   }
   .banner-img {
     height: 100%;
