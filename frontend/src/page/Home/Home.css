@@ -82,7 +82,7 @@
 }
 @media (min-width: 1440px) {
   .hero {
-    height: 60vh;
+    height: 100vh;
   }
   .banner-img {
     height: 100%;
@@ -93,13 +93,11 @@
     font-size: 3rem;
   }
 }
-@media (max-width: 1024px) {
+@media (max-width: 1224px) {
   .hero {
-    height: auto
+    height: 80vh
   }
-  .banner-img {
-    height: 100%;
-  }
+
 }
 @media (max-width: 1024px) {
   .hero {
@@ -107,6 +105,9 @@
   }
   .hero-caption .title-cards {
     display: none;
+  }
+    .banner-img {
+    height: 100%;
   }
   .hero-btn {
     margin-bottom: 30px;
