@@ -95,7 +95,7 @@
 }
 @media (max-width: 1024px) {
   .hero {
-    height: 85vh;
+    height: auto
   }
   .banner-img {
     height: 100%;
@@ -103,7 +103,7 @@
 }
 @media (max-width: 1024px) {
   .hero {
-    height: 1500px;
+    height: auto;
   }
   .hero-caption .title-cards {
     display: none;
